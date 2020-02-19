@@ -1,6 +1,7 @@
 <script>
   import { issuesStore } from "./storage/issues.store";
   import IssueEdit from "./IssueEdit.svelte";
+  import { remove } from "./storage/mongo-lab";
 
   export let category = null;
 
@@ -10,6 +11,11 @@
   $: issuesInCategory = $issuesStore.filter(
     issue => category === null || issue.catId === category
   );
+
+  // TODO(pk): move this to a store
+  function removeIssue(issue) {
+    remove("issues", issue._id).then(_ => issuesStore.remove(issue));
+  }
 </script>
 
 Total: {issuesInCategory.length}
@@ -18,7 +24,7 @@ Total: {issuesInCategory.length}
     <tr>
       <th>No</th>
       <th>Title</th>
-      <th>Operations</th>
+      <th>Operations!</th>
     </tr>
   </thead>
   <tbody>
@@ -34,6 +40,7 @@ Total: {issuesInCategory.length}
         <td>{issue.title}</td>
         <td>
           <button on:click={() => (selected = issue)}>E</button>
+          <button on:click={() => removeIssue(issue)}>D</button>
         </td>
       </tr>
       {#if issue === selected}

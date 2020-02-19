@@ -12,6 +12,13 @@ function createIssuesStore() {
     add: (newIssue) => update((issues) => {
       issues.push(newIssue);
       return issues;
+    }),
+    remove: (existingIssue) => update((issues) => {
+      // TODO(pk): how to remove the item from the DB, here? In other words, how
+      // to make this method async?
+      const idxOfTheExistingIssue = issues.indexOf(existingIssue);
+      issues.splice(idxOfTheExistingIssue, 1);
+      return issues;
     })
   };
 
