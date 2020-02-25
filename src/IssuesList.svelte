@@ -12,9 +12,13 @@
     issue => category === null || issue.catId === category
   );
 
-  // TODO(pk): move this to a store
   function removeIssue(issue) {
-    remove("issues", issue._id).then(_ => issuesStore.remove(issue));
+    issuesStore.remove(issue);
+  }
+
+  function updateIssue(issue) {
+    selected = null;
+    issuesStore.updateIssue(issue);
   }
 </script>
 
@@ -46,7 +50,9 @@ Total: {issuesInCategory.length}
       {#if issue === selected}
         <tr>
           <td colspan="3">
-            <IssueEdit issue={selected} />
+            <IssueEdit
+              issue={selected}
+              on:issueSave={e => updateIssue(e.detail)} />
           </td>
         </tr>
       {/if}
