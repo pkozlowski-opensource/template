@@ -1,15 +1,18 @@
 <script>
-  import { onMount } from "svelte";
-  import { list } from "./storage/mongo-lab";
-
   import Categories from "./Categories.svelte";
   import IssuesList from "./IssuesList.svelte";
-  import GitHubIssuesList from "./GitHubIssuesList.svelte";
+  import Dashboard from "./Dashboard.svelte";
 
   let category = null;
+  let showDashboard = false;
 </script>
 
 <div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <Dashboard />
+    </div>
+  </div>
   <div class="row">
     <div class="col-3">
       <Categories

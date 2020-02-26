@@ -5,7 +5,7 @@
 
   const dispatch = createEventDispatcher();
 
-  export let categoryId;
+  export let categoryId = null;
 
   $: childCategories = $categoriesStore.filter(
     category => category.parentId === categoryId
@@ -19,13 +19,13 @@
 <ul>
   {#each childCategories as childCategory}
     <li>
-      <a href="#" on:click={e => selectCategory(childCategory._id)}>
+      <a href on:click|preventDefault={e => selectCategory(childCategory._id)}>
         {childCategory.title}
       </a>
 
       <svelte:self
         categoryId={childCategory._id}
-        on:categorySelect={e => dispatch('categorySelect', e.detail)} />
+        on:categorySelect={e => selectCategory(e.detail)} />
     </li>
   {/each}
 </ul>

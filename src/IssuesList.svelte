@@ -28,11 +28,11 @@ Total: {issuesInCategory.length}
     <tr>
       <th>No</th>
       <th>Title</th>
-      <th>Operations!</th>
+      <th>Operations</th>
     </tr>
   </thead>
   <tbody>
-    {#each issuesInCategory as issue}
+    {#each issuesInCategory as issue (issue._id)}
       <tr>
         <td>
           <a

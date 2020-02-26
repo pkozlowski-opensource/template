@@ -1,4 +1,5 @@
 import {writable} from 'svelte/store';
+
 import {list, remove as removeFromMongoDB, save} from './mongo-lab';
 
 function createIssuesStore() {
@@ -8,10 +9,12 @@ function createIssuesStore() {
 
   const store = {
     subscribe,
-    add: (newIssue) => update((issues) => {
-      issues.push(newIssue);
-      return issues;
-    }),
+    add: (newIssue) => {
+      update((issues) => {
+        issues.push(newIssue);
+        return issues;
+      })
+    },
     remove: (existingIssue) => {
       removeFromMongoDB('issues', existingIssue._id).then(_ => {
         update(issues => {
