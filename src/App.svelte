@@ -1,26 +1,34 @@
 <script>
   import Categories from "./Categories.svelte";
   import IssuesList from "./IssuesList.svelte";
-  import Dashboard from "./Dashboard.svelte";
+  import GitHubIssuesList from "./GitHubIssuesList.svelte";
 
   let category = null;
-  let showDashboard = false;
+  let triage = false;
 </script>
 
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <Dashboard />
+      <button on:click={() => (triage = true)}>Triage</button>
+      <button on:click={() => (triage = false)}>Explore</button>
+      <hr />
     </div>
   </div>
-  <div class="row">
-    <div class="col-3">
-      <Categories
-        categoryId={null}
-        on:categorySelect={e => (category = e.detail)} />
+  {#if triage}
+    <div class="row">
+      <div class="col-12">
+        <GitHubIssuesList />
+      </div>
     </div>
-    <div class="col border-left">
-      <IssuesList {category} />
+  {:else}
+    <div class="row">
+      <div class="col-3">
+        <Categories on:categorySelect={e => (category = e.detail)} />
+      </div>
+      <div class="col border-left">
+        <IssuesList {category} />
+      </div>
     </div>
-  </div>
+  {/if}
 </div>

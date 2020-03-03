@@ -17,7 +17,7 @@
 	* no auto-importing, actual auto-completion for imports seldom works
 	* unused imports are not detected
 * missing DI, without it I'm having hard time to structure an app :-/
-
+* lack of fragment nodes (<> in React) which causes problems for content projection
 
 # The ugly
 
