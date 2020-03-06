@@ -1,7 +1,9 @@
 <script>
-  import { ghIssuesStore } from "./storage/github.store";
+  import { derived } from "svelte/store";
+
   import { categoriesStore } from "./storage/categories.store";
   import { issuesStore } from "./storage/issues.store";
+  import { ghIssuesStore } from "./storage/github.store";
 
   let issueToTriage = {};
 
@@ -9,10 +11,24 @@
     issuesStore.add(issue);
     issueToTriage = {};
   }
+
+  const filteredGhIssues = derived(
+    [issuesStore, ghIssuesStore],
+    ([$issuesStore, $ghIssuesStore], set) => {
+      const triagedIds = $issuesStore.map(i => i._id);
+
+      const notTriaged = $ghIssuesStore.filter(
+        ghi => triagedIds.indexOf(ghi.number) === -1
+      );
+
+      set(notTriaged);
+    }
+  );
+
+  $: noOfIssuesToTriage = $filteredGhIssues.length;
 </script>
 
-<h1>GitHub issues to triage</h1>
-
+Remaining to triage: {noOfIssuesToTriage}
 <table class="table table-sm table-hover">
   <thead>
     <tr>
@@ -22,10 +38,14 @@
     </tr>
   </thead>
   <tbody>
-    {#each $ghIssuesStore as issue}
+    {#each $filteredGhIssues as issue}
       <tr>
         <td>
-          <a href={issue.url} target="_blank">#{issue.number}</a>
+          <a
+            href="https://github.com/angular/angular/issues/{issue.number}"
+            target="_blank">
+            #{issue.number}
+          </a>
         </td>
         <td>{issue.title}</td>
         <td>
@@ -50,19 +70,27 @@
               <option value="bug">bug</option>
               <option value="feature">feature</option>
               <option value="use-case">use-case</option>
+              <option value="confusion">confusion</option>
+              <option value="boilerplate">boilerplate</option>
               <option value="investigation">investigation</option>
             </select>
             <br />
-            Priority:
-            <select bind:value={issueToTriage.priority}>
-              <option value="P0">P0</option>
-              <option value="P0">P1</option>
-              <option value="P0">P2</option>
-              <option value="P0">P3</option>
+            Technology:
+            <select bind:value={issueToTriage.technology}>
+              <option value={null}>-</option>
+              <option value="svg">SVG</option>
+              <option value="custom_el">Custom elements</option>
+              <option value="csp">CSP</option>
             </select>
             <br />
             Title:
             <input type="text" bind:value={issueToTriage.title} />
+            <br />
+            <input type="checkbox" bind:checked={issueToTriage.ivy} />
+            Ivy regression?
+            <br />
+            <input type="checkbox" bind:checked={issueToTriage.error_message} />
+            Error message?
             <br />
             <button on:click={_ => saveIssue(issueToTriage)}>Save</button>
           </td>

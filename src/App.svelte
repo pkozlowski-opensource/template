@@ -4,7 +4,7 @@
   import GitHubIssuesList from "./GitHubIssuesList.svelte";
 
   let category = null;
-  let triage = false;
+  let triage = true;
 </script>
 
 <div class="container-fluid">

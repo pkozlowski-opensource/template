@@ -5,15 +5,18 @@ import {list, remove as removeFromMongoDB, save} from './mongo-lab';
 function createIssuesStore() {
   const {subscribe, set, update} = writable([]);
 
-  list('issues').then((issues) => set(issues));
+  list('issues').then((issuesAndPrs) => {
+    set(issuesAndPrs);
+  });
+
 
   const store = {
     subscribe,
     add: (newIssue) => {
-      update((issues) => {
-        issues.push(newIssue);
-        return issues;
-      })
+      save('issues', newIssue).then(_ => {update((issues) => {
+                                      issues.push(newIssue);
+                                      return issues;
+                                    })});
     },
     remove: (existingIssue) => {
       removeFromMongoDB('issues', existingIssue._id).then(_ => {
