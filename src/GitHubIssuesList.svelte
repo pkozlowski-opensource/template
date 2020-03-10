@@ -81,6 +81,7 @@ Remaining to triage: {noOfIssuesToTriage}
               <option value="svg">SVG</option>
               <option value="custom_el">Custom elements</option>
               <option value="csp">CSP</option>
+              <option value="observable">RxJS/Observable</option>
             </select>
             <br />
             Title:

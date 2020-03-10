@@ -52,7 +52,8 @@ Total: {issuesInCategory.length}
           <td colspan="3">
             <IssueEdit
               issue={selected}
-              on:issueSave={e => updateIssue(e.detail)} />
+              on:issueSave={e => updateIssue(e.detail)}
+              on:cancel={e => (selected = null)} />
           </td>
         </tr>
       {/if}
